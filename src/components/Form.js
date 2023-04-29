@@ -40,20 +40,20 @@ export function Form({ setModalVisible, setDataList }) {
     emission_date: ""
   })
 
-  useEffect(() => {
-    function gerarChave() {
-      const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-      let chave = '';
-      for (let i = 0; i < 6; i++) {
-        chave += caracteres.charAt(Math.floor(Math.random() * caracteres.length));
-      }
-      setKeyAccess(chave);
-      setFields({
-        ...fields,
-        key_access: chave
-      })
+  function gerarChave() {
+    const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let chave = '';
+    for (let i = 0; i < 6; i++) {
+      chave += caracteres.charAt(Math.floor(Math.random() * caracteres.length));
     }
+    setKeyAccess(chave);
+    setFields({
+      ...fields,
+      key_access: chave
+    })
+  }
 
+  useEffect(() => {
     gerarChave()
   }, [])
 
@@ -261,6 +261,20 @@ export function Form({ setModalVisible, setDataList }) {
             onClick={() => {
               setDataList((currentList) => [...currentList, fields])
               setModalVisible(true)
+              setBuyDate("")
+              setCity("")
+              setClient("")
+              setDistrict("")
+              setEmissionDate("")
+              setInvoiceNumber("")
+              setNeighborhood("")
+              setPhone("")
+              setZipcode("")
+              setInvoiceNumber("")
+              setStateUf("")
+              setKeyAccess(gerarChave())
+              setProductValue("")
+              setProduct("")
             }}
             className="rounded-md bg-indigo-600 px-5 py-2 text-md font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
           >
