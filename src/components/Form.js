@@ -15,6 +15,7 @@ export function Form({ setModalVisible, setDataList }) {
   const [phone, setPhone] = useState("");
   const [client, setClient] = useState("");
   const [buyDate, setBuyDate] = useState("");
+  const[homeNumber, setHomeNumber] = useState("");
 
   //state invoice 
   const [keyAccess, setKeyAccess] = useState("");
@@ -31,8 +32,9 @@ export function Form({ setModalVisible, setDataList }) {
     city: "",
     district: "",
     neighborhood: "",
+    homeNumber: "",
     phone: "",
-    invoice_number: "",
+    invoiceNumber: "",
     buy_date: "",
     key_access: "",
     product: "",
@@ -40,33 +42,39 @@ export function Form({ setModalVisible, setDataList }) {
     emission_date: ""
   })
 
-  function gerarChave() {
+  function generateKey() {
     const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let chave = '';
     for (let i = 0; i < 6; i++) {
       chave += caracteres.charAt(Math.floor(Math.random() * caracteres.length));
     }
     setKeyAccess(chave);
+    return chave
+  }
+  function generateNumberInvoice() {
+    const randomNumber = Math.floor(Math.random() * 900000) + 100000;
+    const randonLetter = String.fromCharCode(65 + Math.floor(Math.random() * 26));
+    const invoice = randonLetter + randomNumber;
+  
+    setInvoiceNumber(invoice)
     setFields({
       ...fields,
-      key_access: chave
+      invoiceNumber: invoice,
     })
+    return invoice
   }
 
   useEffect(() => {
-    gerarChave()
+    generateKey()
+    generateNumberInvoice()
   }, [])
 
-  function maskToInvoiceNumber(event) {
-    const regex = /^[0-9]{0,12}$/; // expressão regular para permitir apenas números de até 12 dígitos
-    const value = event.target.value;
-    if (regex.test(value)) { // testa se o valor inserido está de acordo com a expressão regular
-      setInvoiceNumber(value);
-      setFields({
-        ...fields,
-        invoice_number: value
-      })
-    }
+  function handleSetHomeNumber(event) {
+    setHomeNumber(event.target.value)
+    setFields({
+      ...fields,
+      homeNumber: event.target.value,
+    })
   }
 
   function handleSetValueProduct(event) {
@@ -146,106 +154,113 @@ export function Form({ setModalVisible, setDataList }) {
 
   return (
     <Fragment>
-      <form className="w-[800px] mt-5">
+      <form className="w-[800px] bg-white shadow-lg border-2 border-gray-200 p-10 rounded-2xl mt-5">
         <div className="space-y-12">
-          <h2 className="text-2xl font-semibold leading-7 text-gray-200">Criar nota fiscal</h2>
-          <div className="border-b border-gray-50/10 pb-12">
-            <h2 className="text-lg font-semibold leading-7 text-gray-200">Dados do cliente</h2>
+          <h2 className="text-2xl font-semibold leading-7 text-gray-900">Criar nota fiscal</h2>
+          <div className="border-b border-gray-300 pb-12">
+            <h2 className="text-lg font-semibold leading-7 text-gray-900">Dados do cliente</h2>
 
             <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
               <div className="sm:col-span-3">
-                <label htmlFor="cliente" className="block text-md font-medium leading-6 text-gray-200">Cliente *</label>
+                <label htmlFor="cliente" className="block text-md font-medium leading-6 text-gray-900">Cliente *</label>
                 <div className="mt-2">
                   <input type="text" name="cliente" aria-required="true" required value={client} onChange={getInputClient} id="cliente"className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-md sm:leading-6" />
                 </div>
               </div>
 
               <div className="sm:col-span-3">
-                <label htmlFor="telefone" className="block text-md font-medium leading-6 text-gray-200">Telefone *</label>
+                <label htmlFor="telefone" className="block text-md font-medium leading-6 text-gray-900">Telefone *</label>
                 <div className="mt-2">
                   <input type="text" name="telefone" aria-required="true" required value={phone} onChange={maskPhoneNumber} id="telefone" className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-md sm:leading-6" />
                 </div>
               </div>
 
               <div className="sm:col-span-4">
-                <label htmlFor="dateBuy" className="block text-md font-medium leading-6 text-gray-200">Data da compra *</label>
+                <label htmlFor="dateBuy" className="block text-md font-medium leading-6 text-gray-900">Data da compra *</label>
                 <div className="mt-2">
                   <input id="dateBuy" name="dateBuy" onChange={handleSetBuyDate} value={buyDate} aria-required="true" required type="datetime-local" className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-md md:leading-6" />
                 </div>
               </div>
 
               <div className="sm:col-span-3">
-                <label htmlFor="country" className="block text-md font-medium leading-6 text-gray-200">Código Postal *</label>
+                <label htmlFor="country" className="block text-md font-medium leading-6 text-gray-900">Código Postal *</label>
                 <div className="mt-2">
                   <input id="email" name="email" aria-required="true" required value={zipCode}  onChange={handleSearchAddress} type="email" className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-md sm:leading-6" />
                 </div>
               </div>
 
               <div className="col-span-full">
-                <label htmlFor="Logradouro" className="block text-md font-medium leading-6 text-gray-200">Logradouro</label>
+                <label htmlFor="Logradouro" className="block text-md font-medium leading-6 text-gray-900">Logradouro</label>
                 <div className="mt-2">
                   <input type="text" name="Logradouro" aria-required="true" required defaultValue={district} id="Logradouro" className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-md sm:leading-6" />
                 </div>
               </div>
 
               <div className="sm:col-span-2 sm:col-start-1">
-                <label htmlFor="city" className="block text-md font-medium leading-6 text-gray-200">City</label>
+                <label htmlFor="city" className="block text-md font-medium leading-6 text-gray-900">Cidade</label>
                 <div className="mt-2">
                   <input type="text" name="city" aria-required="true" required id="city" defaultValue={city} className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-md sm:leading-6" />
                 </div>
               </div>
 
               <div className="sm:col-span-2">
-                <label htmlFor="uf" className="block text-md font-medium leading-6 text-gray-200">UF</label>
+                <label htmlFor="uf" className="block text-md font-medium leading-6 text-gray-900">UF</label>
                 <div className="mt-2">
                   <input type="text" name="uf" aria-required="true" required id="uf" defaultValue={stateUf} className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-md sm:leading-6" />
                 </div>
               </div>
 
               <div className="sm:col-span-2">
-                <label htmlFor="bairro" className="block text-md font-medium leading-6 text-gray-200">Bairro</label>
+                <label htmlFor="bairro" className="block text-md font-medium leading-6 text-gray-900">Bairro</label>
                 <div className="mt-2">
                   <input type="text" name="bairro" aria-required="true" required defaultValue={neighborhood} id="bairro" className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-md sm:leading-6" />
+                </div>
+              </div>
+
+              <div className="sm:col-span-2">
+                <label htmlFor="home_number" className="block text-md font-medium leading-6 text-gray-900">N° Residência</label>
+                <div className="mt-2">
+                  <input type="text" name="home_number" aria-required="true" required value={homeNumber} onChange={handleSetHomeNumber} id="home_number" className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-md sm:leading-6" />
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="border-b border-gray-900/10 pb-12">
-            <h2 className="text-lg font-semibold leading-7 text-gray-200">Dados da nota fiscal</h2>
+          <div className="border-b border-gray-300 pb-12">
+            <h2 className="text-lg font-semibold leading-7 text-gray-900">Dados da nota fiscal</h2>
 
             <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
 
               <div className="sm:col-span-2">
-                <label htmlFor="key" className="block text-md font-medium leading-6 text-gray-200">Chave de acesso</label>
+                <label htmlFor="key" className="block text-md font-medium leading-6 text-gray-900">Chave de acesso</label>
                 <div className="mt-2">
-                  <input type="text" name="key" id="key" defaultValue={keyAccess} className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-md sm:leading-6" />
+                  <input type="text" name="key" id="key" value={keyAccess} className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-md sm:leading-6" />
                 </div>
               </div>
 
               <div className="col-span-full">
-                <label htmlFor="number" className="block text-md font-medium leading-6 text-gray-200">Número da nota fiscal *</label>
+                <label htmlFor="number" className="block text-md font-medium leading-6 text-gray-900">Identificador da nota fiscal</label>
                 <div className="mt-2">
-                  <input type="text" name="number" id="number" value={invoiceNumber} onChange={maskToInvoiceNumber} className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-md sm:leading-6" />
+                  <input type="text" name="number" id="number" value={invoiceNumber} className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-md sm:leading-6" />
                 </div>
               </div>
 
               <div className="sm:col-span-2 sm:col-start-1">
-                <label htmlFor="product" className="block text-md font-medium leading-6 text-gray-200">Produto *</label>
+                <label htmlFor="product" className="block text-md font-medium leading-6 text-gray-900">Produto *</label>
                 <div className="mt-2">
                   <input type="text" name="product" value={product} onChange={handleSetProduct} aria-required="true" required id="product" className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-md sm:leading-6" />
                 </div>
               </div>
 
               <div className="sm:col-span-2">
-                <label htmlFor="value" className="block text-md font-medium leading-6 text-gray-200">Valor do produto *</label>
+                <label htmlFor="value" className="block text-md font-medium leading-6 text-gray-900">Valor do em R$ *</label>
                 <div className="mt-2">
                   <input type="text" name="value" value={ productValue } onChange={handleSetValueProduct} aria-required="true" required id="value"  className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-md sm:leading-6" />
                 </div>
               </div>
 
               <div className="sm:col-span-2">
-                <label htmlFor="emission" className="block text-md font-medium leading-6 text-gray-200">Data de Emissão *</label>
+                <label htmlFor="emission" className="block text-md font-medium leading-6 text-gray-900">Data de Emissão *</label>
                 <div className="mt-2">
                   <input type="datetime-local" name="emission" value={emissionDate} onChange={handleSetEmissionDate} id="emission" className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-md sm:leading-6" />
                 </div>
@@ -255,11 +270,15 @@ export function Form({ setModalVisible, setDataList }) {
           </div>
         </div>
         <div className="mt-6 flex items-center justify-end gap-x-6">
-          <button type="button" className="text-md font-semibold leading-6 text-gray-200">Cancelar</button>
+          {/* <button type="button" className="text-md font-semibold leading-6 text-gray-900">Cancelar</button> */}
           <button 
             type="button"
             onClick={() => {
-              setDataList((currentList) => [...currentList, fields])
+              const fieldsWithKey = {
+                ...fields,
+                key_access: keyAccess
+              }
+              setDataList((currentList) => [...currentList, fieldsWithKey ])
               setModalVisible(true)
               setBuyDate("")
               setCity("")
@@ -270,11 +289,12 @@ export function Form({ setModalVisible, setDataList }) {
               setNeighborhood("")
               setPhone("")
               setZipcode("")
-              setInvoiceNumber("")
+              setInvoiceNumber(generateNumberInvoice())
               setStateUf("")
-              setKeyAccess(gerarChave())
+              setKeyAccess(generateKey())
               setProductValue("")
               setProduct("")
+              setHomeNumber("")
             }}
             className="rounded-md bg-indigo-600 px-5 py-2 text-md font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
           >
