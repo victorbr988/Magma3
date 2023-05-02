@@ -11,7 +11,7 @@ export default function Home() {
   return (
     <Fragment>
       <Header />
-      <main className='sm:p-20 p-10 min-h-screen flex justify-center'>
+      <main className='sm:p-20 min-h-screen flex justify-center'>
         <Form setModalVisible={setModalVisible} setDataList={setDataList} />
         <Modal setModalVisible={setModalVisible} visible={modalVisible} data={dataList} />
       </main>
