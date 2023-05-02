@@ -278,7 +278,7 @@ export function Form({ setModalVisible, setDataList }) {
                 ...fields,
                 key_access: keyAccess
               }
-              setDataList((currentList) => [...currentList, fieldsWithKey ])
+              setDataList(fieldsWithKey)
               setModalVisible(true)
               setBuyDate("")
               setCity("")

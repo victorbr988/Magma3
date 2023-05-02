@@ -1,15 +1,22 @@
 import { useEffect, useState } from "react"
 import { TableTr } from "./TableTr"
+import axios from "axios"
+import { toast } from "react-hot-toast"
 
 export function InvoicesTable({ setModalVisible }) {
   const [formFields, setFormFields] = useState([])
 
-  useEffect(() => {
-    const localformFields = JSON.parse(localStorage.getItem("formFields")) || []
-    setFormFields([
-      ...formFields,
-      ...localformFields
-    ])
+  useEffect(() => {    
+    async function getAllinvoices() {
+      try {
+        const url = 'https://localhost:7012/api/v1/notas-fiscais/buscar-todas'
+        const totalInvoices = await axios.get(url)
+        setFormFields(totalInvoices.data)
+      } catch(err) {
+        console.log(err)
+      }
+    }
+    getAllinvoices()
   }, [])
 
   return (
